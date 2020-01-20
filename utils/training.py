@@ -16,8 +16,12 @@ from . import imgs as img_utils
 RESULTS_PATH = '.results/'
 WEIGHTS_PATH = './weights/'
 
-
 def save_weights(model, epoch, loss, err):
+    '''
+    Function - Saving the weights of while training
+    Parameters- Epoch number,loss and error(all are of int type)
+
+    '''
     weights_fname = 'weights-%d-%.3f-%.3f.pth' % (epoch, loss, err)
     weights_fpath = os.path.join(WEIGHTS_PATH, weights_fname)
 
@@ -31,6 +35,8 @@ def save_weights(model, epoch, loss, err):
     shutil.copyfile(weights_fpath, WEIGHTS_PATH+'latest.th')
 
 def load_weights(model, fpath):
+    '''dangling
+    '''
     print("loading weights '{}'".format(fpath))
     weights = torch.load(fpath)
     startEpoch = weights['startEpoch']
@@ -40,6 +46,11 @@ def load_weights(model, fpath):
     return startEpoch
 
 def get_predictions(output_batch):
+    '''
+    Converting the the tensor generated, to the image with the class-number of the highest probability
+    Parameters- output_batch- tensor of size `Batch_size`X`No_of_classes`XHXW
+    Output- Indices with dimension `Batch_sizeXHXW` with individual pixel having the class predicted
+    '''
     bs,c,h,w = output_batch.size()
     tensor = output_batch.data
     values, indices = tensor.cpu().max(1)
@@ -48,6 +59,14 @@ def get_predictions(output_batch):
 
 
 def criterion(probas,true_1_hot,eps=1e-7):
+    '''
+    Customiszed Loss Function
+    Parameters-
+        probas-the generated output from the model
+        true_1_hot- The one hot encoded grounf truth
+    Output-
+        Loss
+    '''
     intersection=torch.sum(probas*true_1_hot,0)
     intersection=torch.sum(intersection,-1)
     intersection=torch.sum(intersection,-1)
@@ -108,6 +127,7 @@ def adjust_learning_rate(lr, decay, optimizer, cur_epoch, n_epochs):
         param_group['lr'] = new_lr
 
 def weights_init(m):
+    '''Initailisng the weights'''
     if isinstance(m, nn.Conv2d):
         nn.init.kaiming_uniform(m.weight)
         m.bias.data.zero_()
