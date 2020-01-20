@@ -48,8 +48,10 @@ def load_weights(model, fpath):
 def get_predictions(output_batch):
     '''
     Converting the the tensor generated, to the image with the class-number of the highest probability
-    Parameters- output_batch- tensor of size `Batch_size`X`No_of_classes`XHXW
-    Output- Indices with dimension `Batch_sizeXHXW` with individual pixel having the class predicted
+    Parameters- 
+        output_batch- tensor of size `Batch_size` X `No_of_classes` X `H` X `W`
+    Output- 
+        Indices with dimension `Batch_size` X `H` X `W` with individual pixel having the class predicted
     '''
     bs,c,h,w = output_batch.size()
     tensor = output_batch.data

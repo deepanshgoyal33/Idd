@@ -20,10 +20,11 @@ batch_size=1
 write_path = './result_posprocessing'
 weight_path='./weights/weights-500-0.238-0.238.pth'
 
-'''
-Function to load model
-'''
+
 def load_model(path=None):
+	'''
+		Function to load model
+	'''
 	model = tiramisu.FCDenseNet103(n_classes=8).cuda()
 	weights = torch.load(path)
 	model.load_state_dict(weights['state_dict'])

@@ -67,6 +67,9 @@ class CustomDataset(Dataset):
 		return ground_truth
 
 	def visualize(self,image, gt):
+		'''
+		Function- to visulise the images and ground truths
+		'''
 		plt.imshow(image)
 		plt.show()
 		for index in range(self.classes):
@@ -76,8 +79,10 @@ class CustomDataset(Dataset):
 	def read_image_and_gt(self,data):
 		''' 
 			Function: To read the images and the ground truths
-			Parameters: Data is in tuple form with zeroth index as the location of the image and the other index as the location of the segmented ground truth
-			
+			Parameters: 
+				data - It is in tuple form with zeroth index as the location of the image and the other index as the location of the segmented ground truth
+			Output-
+				image_various_scale - return the image in new scale.
 		''' 
 		file_name=data[0]
 		image = cv2.imread(file_name)
@@ -111,7 +116,6 @@ class CustomDataset(Dataset):
 			return image_various_scale, gt_various_scale
 		else:
 			return image_various_scale
-
 
 	def __getitem__(self, index):
 		image_batch = torch.zeros(3,self.image_size,self.image_size).type(torch.FloatTensor)
