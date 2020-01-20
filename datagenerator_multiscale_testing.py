@@ -78,7 +78,7 @@ class CustomDataset(Dataset):
 	
 	def read_image_and_gt(self,data):
 		''' 
-			Function: To read the images and the ground truths
+			Function: To read the images and the ground truths and scale it to the desired value
 			Parameters: 
 				data - It is in tuple form with zeroth index as the location of the image and the other index as the location of the segmented ground truth
 			Output-
