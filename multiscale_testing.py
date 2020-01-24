@@ -32,6 +32,9 @@ def load_model(path=None):
 
 
 def test_model(model, test_loader):
+	'''
+	Function : Test model for multiscale testing
+	'''
 	model.eval()
 	test_loss = 0
 	test_error = 0
