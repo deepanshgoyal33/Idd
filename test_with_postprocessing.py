@@ -32,7 +32,16 @@ def load_model(path=None):
 
 
 
-def postprocessing(labels,image_path,out_threshold=0.5,HAS_UNK=0):
+def postprocessing(labels,image_path):
+	'''
+	Fuction: To return the psotprocessed output ie. using the dense crf funtion for incresing the sharpness of the edges
+		Parameters:
+			Labels: array of size N-classesXHXW containg the probabilities of each pixel and of each class
+			image_path: Path to the image(str)
+		Outputs:
+			result: post precessed output
+
+	'''
 	img = cv2.imread(image_path)
 
 	print('cross check',np.unique(labels))

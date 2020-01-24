@@ -104,6 +104,14 @@ def train(model, trn_loader, optimizer, epoch):
     return trn_loss
 
 def validation(model, test_loader, epoch=1):
+    '''
+    Function - Give the loss over the validation data
+    Parameters:
+        Model:
+        test_loader: dataloader of the test Images
+    Output:
+        Test_loss:Loss(int)
+    '''
     model.eval()
     test_loss = 0
     for idx, data in enumerate(test_loader):
