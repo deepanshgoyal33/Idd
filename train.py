@@ -5,6 +5,7 @@ import torch.optim as optim
 from models import tiramisu
 import utils.training as train_utils
 from datagenerator_new import CustomDataset
+from utils.utils import load_model
 path='./dataset/'
 batch_size=1
 N_EPOCHS=500
@@ -14,16 +15,10 @@ LR_DECAY = 0.995
 DECAY_EVERY_N_EPOCHS = 1
 torch.cuda.manual_seed(0)
 
-def load_model(path=None):
-	if path==None:
-		model = tiramisu.FCDenseNet57(n_classes=30).cuda()
-	model.apply(train_utils.weights_init)
-	return model
-
 print('loading model:')
 model=load_model()
-
 optimizer = torch.optim.RMSprop(model.parameters(), lr=LR, weight_decay=1e-4)
+
 print('loading Training Dataset:')
 train_loader = torch.utils.data.DataLoader(CustomDataset(batch_size,path,'train'),batch_size, shuffle=True, num_workers=4)
 print('loading Validation Dataset:')

@@ -51,10 +51,10 @@ class CustomDataset(Dataset):
 		'''
 		Function- Returning the ground truth with the new scaled dimensions
 		Parameters-
-		gt- Ground truth of size HXW with unique labels of class labels
-		scale - scaling factor 
+			gt- Ground truth of size HXW with unique labels of class labels
+			scale - scaling factor 
 		Outputs-
-		ground_truth : the one hot encoded ground truth with shape [n_classes]x[(scale_factor)*H]x[(scale_factor)*W]
+			ground_truth : the one hot encoded ground truth with shape [n_classes]x[(scale_factor)*H]x[(scale_factor)*W]
 
 		'''
 		desired_size=int(scale*self.image_size)

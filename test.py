@@ -10,19 +10,28 @@ import numpy as np
 import os
 import cv2
 from matplotlib import pyplot as plt
+from utils.utils import load_model
 
+# the path of the dataset 
 path='./dataset/'
+
+# the size of the mini batch
 batch_size=1
+
+# the writing path of the generated results
 write_path = './result'
+
+# the path of the trained model used for testing
 weight_path='./weights/weights-500-0.238-0.238.pth'
 
-def load_model(path=None):
-	model = tiramisu.FCDenseNet103(n_classes=8).cuda()
-	weights = torch.load(path)
-	model.load_state_dict(weights['state_dict'])
-	return model
-
-def test_model(model, test_loader):
+def test_model(model, test_loader, viz=False):
+	'''
+	Testing the model
+	parameters:
+		model 		: the trained model 
+		test_loader 	: the dataloder object used to fetch the test images 
+	'''
+	# used model in the evaluation mode
 	model.eval()
 	test_loss = 0
 	test_error = 0
@@ -35,30 +44,35 @@ def test_model(model, test_loader):
 			print(output.shape)
 			output = torch.argmax(output,dim=1).squeeze().cpu().detach().numpy()
 			output = output[0:227,0:320]
-#			plt.imshow(output)
-#			plt.show()
-#			for index in range(8):
-#				plt.imshow(output[index,...])
-#				plt.show()
-#			print(np.unique(output))
+			if viz==True:
+				plt.imshow(output)
+				plt.show()
+				for index in range(8):
+					plt.imshow(output[index,...])
+					plt.show()
 			background = (output==7)*255
 			positive_class = (output<7)*1
-	#		plt.imshow(positive_class)
-	#		plt.show()
-	#		plt.imshow(background)
-	#		plt.show()
 			output1 = (output*positive_class)+(background*(1-positive_class))
-			#plt.imshow(output1)
-			plt.show()
+			if viz==True:
+				plt.imshow(positive_class)
+				plt.show()
+				plt.imshow(background)
+				plt.show()
+				plt.imshow(output1)
+				plt.show()
 
 			#output = [output1, output1, output1]
 			#output = np.asarray(output)
-			print(output.shape,'.........................................')
+			#print(output.shape,'.........................................')
 			#output = output.transpose(1,2,0)
 			folder = image_path.split(os.sep)[-2]
 			filename = image_path.split(os.sep)[-1].split('_')[0]+'_label.png'
+
+			# create the folder if not exist
 			if not os.path.exists(os.path.join(write_path, folder)):
 				os.mkdir(os.path.join(write_path, folder))
+			
+			# dump the result in form of image
 			cv2.imwrite(os.path.join(write_path,folder,filename), output)
 
 def main():
