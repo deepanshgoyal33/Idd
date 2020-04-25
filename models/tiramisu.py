@@ -29,8 +29,8 @@ class FCDenseNet(nn.Module):
         self.transDownBlocks = nn.ModuleList([])
         for i in range(len(down_blocks)):
             self.denseBlocksDown.append(
-                DenseBlock(cur_channels_count, growth_rate, [i]))
-            cur_channels_count += (growth_rate*[i])
+                DenseBlock(cur_channels_count, growth_rate, down_blocks[i]))
+            cur_channels_count += (growth_rate*down_blocks[i])
             skip_connection_channel_counts.insert(0,cur_channels_count)
             self.transDownBlocks.append(TransitionDown(cur_channels_count))
 
@@ -81,7 +81,7 @@ class FCDenseNet(nn.Module):
         out = self.firstconv(x)
 
         skip_connections = []
-        for i in range(len(self.)):
+        for i in range(len(self.down_blocks)):
             out = self.denseBlocksDown[i](out)
             skip_connections.append(out)
             out = self.transDownBlocks[i](out)
@@ -99,7 +99,7 @@ class FCDenseNet(nn.Module):
 
 def FCDenseNet57(n_classes):
     return FCDenseNet(
-        in_channels=3, =(4, 4, 4, 4, 4),
+        in_channels=3,down_blocks =(4, 4, 4, 4, 4),
         up_blocks=(4, 4, 4, 4, 4), bottleneck_layers=4,
         growth_rate=12, out_chans_first_conv=48, n_classes=n_classes)
 
