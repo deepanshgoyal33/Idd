@@ -11,6 +11,7 @@ import os
 import cv2
 from matplotlib import pyplot as plt
 from utils.utils import load_model
+from PIL import Image
 
 # the path of the dataset 
 path='./dataset/'
@@ -19,7 +20,7 @@ path='./dataset/'
 batch_size=1
 
 # the writing path of the generated results
-write_path = './result'
+write_path = os.path.join(os.getcwd(),'result')
 
 # the path of the trained model used for testing
 weight_path='./weights/weights-500-0.238-0.238.pth'
@@ -37,7 +38,9 @@ def test_model(model, test_loader, viz=False):
 	test_error = 0
 	with torch.no_grad():
 		for idx, data_value in enumerate(test_loader):
-			data = Variable(data_value['image'].cuda(), volatile=True)
+			device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+			data = Variable(data_value['image'].to(device), volatile=True)
+			print("printing image paths")
 			image_path = data_value['file_name'][0]
 			print(image_path)
 			output = model(data)
@@ -66,13 +69,14 @@ def test_model(model, test_loader, viz=False):
 			#print(output.shape,'.........................................')
 			#output = output.transpose(1,2,0)
 			folder = image_path.split(os.sep)[-2]
+			print(folder)
 			filename = image_path.split(os.sep)[-1].split('_')[0]+'_label.png'
+			print(filename)
 
 			# create the folder if not exist
 			if not os.path.exists(os.path.join(write_path, folder)):
-				os.mkdir(os.path.join(write_path, folder))
+				os.makedirs(os.path.join(write_path, folder))
 			
-			# dump the result in form of image
 			cv2.imwrite(os.path.join(write_path,folder,filename), output)
 
 def main():
