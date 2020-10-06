@@ -48,7 +48,7 @@ python test.py
 ```bash
 python multiscale_testing.py
 ```
-3. For single scale testing with CRF post processing 
+3. For single scale testing with CRF post processing:
 ```bash
 python test_with_postprocessing.py
 ```
